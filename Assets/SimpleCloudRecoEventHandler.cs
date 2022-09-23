@@ -10,7 +10,7 @@ public class SimpleCloudRecoEventHandler : MonoBehaviour
     private bool mIsScanning = false;
     private string mTargetMetadata = "";
     public ImageTargetBehaviour ImageTargetTemplate;
-    
+
     // Register cloud reco callbacks
     void Awake()
     {
@@ -32,71 +32,62 @@ public class SimpleCloudRecoEventHandler : MonoBehaviour
         mCloudRecoBehaviour.UnregisterOnNewSearchResultEventHandler(OnNewSearchResult);
     }
 
-    
-  public void OnInitialized(TargetFinder targetFinder) {
-      Debug.Log ("Cloud Reco initialized");
-  }
-  public void OnInitError(TargetFinder.InitState initError) {
-      Debug.Log ("Cloud Reco init error " + initError.ToString());
-  }
-  public void OnUpdateError(TargetFinder.UpdateState updateError) {
-      Debug.Log ("Cloud Reco update error " + updateError.ToString());
-  }
 
-    public void OnStateChanged(bool scanning) {
-  mIsScanning = scanning;
-      if (scanning)
-      {
-      // clear all known trackables
-      var tracker = TrackerManager.Instance.GetTracker<ObjectTracker>();
-      tracker.GetTargetFinder<ImageTargetFinder>().ClearTrackables(false);
-      }
-  }
+    public void OnInitialized(CloudRecoBehaviour cloudRecoBehaviour)
+    {
+        Debug.Log("Cloud Reco initialized");
+    }
+
+    public void OnInitError(CloudRecoBehaviour.InitError initError)
+    {
+        Debug.Log("Cloud Reco init error " + initError.ToString());
+    }
+
+    public void OnUpdateError(CloudRecoBehaviour.QueryError updateError)
+    {
+        Debug.Log("Cloud Reco update error " + updateError.ToString());
+
+    }
+
+    public void OnStateChanged(bool scanning)
+    {
+        mIsScanning = scanning;
+
+        if (scanning)
+        {
+            // Clear all known targets
+        }
+    }
 
     // Here we handle a cloud target recognition event
-  public void OnNewSearchResult(TargetFinder.TargetSearchResult targetSearchResult) {
-  TargetFinder.CloudRecoSearchResult cloudRecoSearchResult = 
-      (TargetFinder.CloudRecoSearchResult)targetSearchResult;
-  // do something with the target metadata
-  mTargetMetadata = cloudRecoSearchResult.MetaData;
+    public void OnNewSearchResult(CloudRecoBehaviour.CloudRecoSearchResult cloudRecoSearchResult)
+    {
+        // Store the target metadata
+        mTargetMetadata = cloudRecoSearchResult.MetaData;
 
-//   Destroy( ImageTargetBehavior.gameObject.transform.Find('Cube').gameObject);
+        // Stop the scanning by disabling the behaviour
+        mCloudRecoBehaviour.enabled = false;
+    }
 
- if (!mIsScanning) {
-  // stop the target finder (i.e. stop scanning the cloud)
-  mCloudRecoBehaviour.CloudRecoEnabled = false;
- } 
 
-//  Build augmentation based on target 
-        if (ImageTargetTemplate) { 
-            // enable the new result with the same ImageTargetBehaviour: 
-            ObjectTracker tracker = TrackerManager.Instance.GetTracker<ObjectTracker>(); 
-            tracker.GetTargetFinder<ImageTargetFinder>().EnableTracking(targetSearchResult, ImageTargetTemplate.gameObject); 
+    void OnGUI()
+    {
+        // Display current 'scanning' status
+        GUI.Box(new Rect(100, 100, 200, 50), mIsScanning ? "Scanning" : "Not scanning");
+        // Display metadata of latest detected cloud-target
+        GUI.Box(new Rect(100, 200, 200, 50), "Metadata: " + mTargetMetadata);
+        // If not scanning, show button
+        // so that user can restart cloud scanning
+        if (!mIsScanning)
+        {
+            if (GUI.Button(new Rect(100, 300, 200, 50), "Restart Scanning"))
+            {
+                // Reset Behaviour
+                mCloudRecoBehaviour.enabled = true;
+                mTargetMetadata = "";
+            }
         }
- }
-
-   void OnGUI() {
-      // Display current 'scanning' status
-      GUI.Box (new Rect(100,100,200,50), mIsScanning ? "Scanning" : "Not scanning");
-      // Display metadata of latest detected cloud-target
-      GUI.Box (new Rect(100,200,200,50), "Metadata: " + mTargetMetadata);
-
-       //create a rect using the method and the GameObject this script is attached to (gameObject)
-    //   Rect boundsRect = new Rect(GUIRectWithObject(gameObject));
-    //draw a blue rect on the box of the rect (will hide the object)
-    //   GUI.DrawRect(boundsRect, Color.blue);
-
-
-      // If not scanning, show button
-      // so that user can restart cloud scanning
-      if (!mIsScanning) {
-          if (GUI.Button(new Rect(100,300,200,50), "Restart Scanning")) {
-          // Restart TargetFinder
-          mCloudRecoBehaviour.CloudRecoEnabled = true;
-          }
-      }
-    //  GUI.DrawTexture(Rect(0, 0, 100, 50), emptyProgressBar);
-  }
+    }
 }
 
 // using UnityEngine;
@@ -253,7 +244,7 @@ public class SimpleCloudRecoEventHandler : MonoBehaviour
 //     }
 //     #endregion // INTERFACE_IMPLEMENTATION_ICloudRecoEventHandler
 
-    
+
 //     void Show3DModel()
 //     {
 //         if (itemName != "")
