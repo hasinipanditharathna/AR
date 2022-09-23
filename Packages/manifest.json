@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.ptc.vuforia.engine": "file:D:/AR APPLICATION/com.ptc.vuforia.engine",
+    "com.ptc.vuforia.engine": "file:../Assets/Editor/Migration/com.ptc.vuforia.engine-10.10.2.tgz",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.2d.spriteshape": "5.1.7",
     "com.unity.collab-proxy": "1.5.7",
