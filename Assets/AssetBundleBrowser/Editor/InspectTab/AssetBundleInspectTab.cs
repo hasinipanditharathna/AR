@@ -1,3 +1,5 @@
+#if (UNITY_EDITOR) 
+
 using UnityEditor;
 using UnityEngine;
 using UnityEditor.IMGUI.Controls;
@@ -512,3 +514,5 @@ namespace AssetBundleBrowser
         }
     }
 }
+
+#endif

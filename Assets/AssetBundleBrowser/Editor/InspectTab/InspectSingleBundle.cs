@@ -1,3 +1,5 @@
+#if (UNITY_EDITOR) 
+
 using UnityEditor;
 using UnityEngine;
 using System.IO;
@@ -127,3 +129,5 @@ namespace AssetBundleBrowser
         }
     }
 }
+
+#endif

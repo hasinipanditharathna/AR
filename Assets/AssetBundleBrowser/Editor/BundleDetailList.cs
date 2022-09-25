@@ -1,4 +1,6 @@
-﻿using UnityEditor;
+﻿#if (UNITY_EDITOR) 
+
+using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEditor.IMGUI.Controls;
@@ -168,3 +170,5 @@ namespace AssetBundleBrowser
 
     }
 }
+
+#endif
