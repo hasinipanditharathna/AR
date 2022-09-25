@@ -1,4 +1,6 @@
-﻿using UnityEditor;
+﻿#if (UNITY_EDITOR) 
+
+using UnityEditor;
 using System;
 
 namespace AssetBundleBrowser.AssetBundleDataSource
@@ -124,3 +126,5 @@ namespace AssetBundleBrowser.AssetBundleDataSource
         bool BuildAssetBundles (ABBuildInfo info);
     }
 }
+
+#endif

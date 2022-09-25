@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿#if (UNITY_EDITOR) 
+
+using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 using System.Linq;
@@ -244,3 +246,6 @@ namespace AssetBundleBrowser.AssetBundleModel
     }
 
 }
+
+
+#endif

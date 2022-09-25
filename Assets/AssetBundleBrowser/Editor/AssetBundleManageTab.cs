@@ -1,4 +1,6 @@
-﻿using UnityEditor;
+﻿#if (UNITY_EDITOR) 
+
+using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 using System.Collections.Generic;
@@ -272,3 +274,5 @@ namespace AssetBundleBrowser
         }
     }
 }
+
+#endif
